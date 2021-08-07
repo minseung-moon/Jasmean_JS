@@ -20,6 +20,6 @@ function shwingList(text) {
 listForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const input = e.target.querySelector("input");
-  shwingList(input.value);
+  input.value ? shwingList(input.value) : null;
   input.value = "";
 });
