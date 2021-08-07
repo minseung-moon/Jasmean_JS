@@ -1,6 +1,8 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Nanum+Gothic&display=swap');
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 body {
@@ -10,31 +12,18 @@ body {
     font-family: 'Do Hyeon', cursive;
 }
 .container-box {
-    width: 50vw;
+    width: 100%;
     height: 100%;
-    border: solid 5px #bd93f9;
-    border-radius: 15px;
-    margin-top: 10%;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
 }
 
-.contents li {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    border-bottom: solid 1px #f8f8f2;
-}
-.contents div{
-    flex-grow: 1;
-    font-size: 1rem;
-}
 .inputlist {
     text-align: center;
     padding : 20px 0 ;
-    margin-top: 50px;
-    border-top: solid 5px #bd93f9;
+    border: solid 5px #bd93f9;
+    border-radius: 15px;
 }
 .inputlist h2 {
     margin-top: 0;
@@ -48,7 +37,28 @@ input {
     width: 30vw;
     height: 30px;
 }
+
+#list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+}
+.contents li {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 23%;
+    padding: 10px;
+    border: solid 5px #bd93f9;
+    border-radius: 15px;
+    margin: 15px 10px;
+}
+.contents div{
+    font-size: 1.5rem;
+}
 button {
+    font-size: 1.5rem;
     font-family: 'Do Hyeon', cursive;
     font-weight: bold;
     text-align: center;

@@ -7,9 +7,11 @@ let todos = [];
 // 처음에 화면이 로드되면서 로컬스토리지의 데이터를 갖고와 화면에 뿌리기
 window.addEventListener("load", () => {
   GetStorage();
-  todos.forEach((todo) => {
-    CreateTodo(todo);
-  });
+  if (todos) {
+    todos.forEach((todo) => {
+      CreateTodo(todo);
+    });
+  }
 });
 
 // 데이터 입력
@@ -28,7 +30,7 @@ function CreateTodo(todo) {
 
   li.dataset.index = todo.index;
   div.innerText = todo.item;
-  delbtn.innerText = "삭제";
+  delbtn.innerText = "지우기";
   delbtn.addEventListener("click", (e) => {
     DeleteStorage(e.target.parentElement.dataset.index);
   });
@@ -41,14 +43,14 @@ function CreateTodo(todo) {
 // Storage
 // 스토리지에 저장된 데이터 불러오기(페이지 로드했을 때)
 function GetStorage() {
-  todos = JSON.parse(localStorage.getItem("todos"));
+  todos = JSON.parse(localStorage.getItem("todos")) ?? [];
 }
 // 스토리지에 데이터 저장
 function SaveStorage(item) {
-  const index = todos[todos.length - 1];
+  const index = todos[todos.length - 1]?.index;
 
   const todo = {
-    index: index?.index ? index + 1 : 1,
+    index: index ?? false ? index + 1 : 1,
     item: item,
   };
 
