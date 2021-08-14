@@ -2,23 +2,26 @@ const list = document.querySelector("#list");
 const listForm = document.querySelector("#listForm");
 
 // 스토리지에 저장된(될) 데이터 배열 변수
-let todos = [];
-
-// 처음에 화면이 로드되면서 로컬스토리지의 데이터를 갖고와 화면에 뿌리기
-window.addEventListener("load", () => {
-  GetStorage();
-  if (todos) {
-    todos.forEach((todo) => {
-      CreateTodo(todo);
-    });
-  }
-});
+let todos = null;
 
 // 데이터 입력
 listForm.addEventListener("submit", (e) => {
   e.preventDefault(); // 각 요소가 가지고 있는 기본 이벤트를 차단
+
   const input = e.target.querySelector("input");
-  if (input.value) SaveStorage(input.value);
+  if (input.value) {
+    // SaveStorage(input.value);
+    const index = todos[todos.length - 1]?.index;
+
+    const todo = {
+      index: index ?? false ? index + 1 : 1,
+      memo: input.value,
+      isDone: false,
+    };
+
+    todos.push(todo);
+    CreateTodo(todo);
+  }
   input.value = "";
 });
 
@@ -29,8 +32,23 @@ function CreateTodo(todo) {
   const div = document.createElement("div");
 
   li.dataset.index = todo.index;
-  div.innerText = todo.item;
+  div.innerText = todo.memo;
   delbtn.innerText = "지우기";
+
+  if (todo.isDone) div.classList.add("done");
+
+  div.addEventListener("click", (e) => {
+    e.target.classList.toggle("done");
+
+    todos.some((item) => {
+      const idx = e.target.parentElement.dataset.index;
+      if (item.index == idx) {
+        item.isDone = true;
+        SaveStorage();
+        return item.index == idx;
+      }
+    });
+  });
   delbtn.addEventListener("click", (e) => {
     DeleteStorage(e.target.parentElement.dataset.index);
   });
@@ -38,6 +56,8 @@ function CreateTodo(todo) {
   li.appendChild(div);
   li.appendChild(delbtn);
   list.appendChild(li);
+
+  SaveStorage();
 }
 
 // Storage
@@ -46,17 +66,7 @@ function GetStorage() {
   todos = JSON.parse(localStorage.getItem("todos")) ?? [];
 }
 // 스토리지에 데이터 저장
-function SaveStorage(item) {
-  const index = todos[todos.length - 1]?.index;
-
-  const todo = {
-    index: index ?? false ? index + 1 : 1,
-    item: item,
-  };
-
-  CreateTodo(todo);
-
-  todos.push(todo);
+function SaveStorage() {
   localStorage.setItem("todos", JSON.stringify(todos));
 }
 
@@ -66,3 +76,15 @@ function DeleteStorage(index) {
   todos = todos.filter((item) => item.index != index);
   localStorage.setItem("todos", JSON.stringify(todos));
 }
+
+// 화면 시작 함수
+function init() {
+  GetStorage();
+  if (todos.length > 0) {
+    todos.forEach((todo) => {
+      CreateTodo(todo);
+    });
+  }
+}
+
+init();
